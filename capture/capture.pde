@@ -3,7 +3,7 @@ import processing.video.*;
 Capture cam;
 
 void setup() {
-  size(640, 480);
+  size(320, 240);
   String[] devices = Capture.list();
   println(devices);
   

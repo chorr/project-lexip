@@ -3,6 +3,7 @@ class Pixel {
   int x;
   int y;
   int tsize = 5;
+  int colorStep = 30;
   
   Pixel(int c, int x, int y) {
     this.c = c;
@@ -13,10 +14,15 @@ class Pixel {
   void update(PGraphics g) {
     if (x % tsize == 0 && y % tsize == 0) {
       g.beginDraw();
-      g.fill(c);
+      g.fill(color(breakColor(red(c)), breakColor(green(c)), breakColor(blue(c))));
+      g.noStroke();
       g.rect(x, y, tsize, tsize);
       g.endDraw();
     }
+  }
+  
+  float breakColor(float cl) {
+    return constrain(ceil(cl / colorStep) * colorStep, 0, 255);
   }
   
 }

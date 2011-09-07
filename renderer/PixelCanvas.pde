@@ -10,8 +10,7 @@ class PixelCanvas {
     height = target.height;
     len = width * height;
     px = new Pixel[len];
-    g = createGraphics(width, height, P2D);
-    g.noSmooth();
+    g = createGraphics(width, height, P3D);
     
     int idx = 0;
     for (int y = 0; y < height; y++) {
