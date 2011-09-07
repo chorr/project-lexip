@@ -2,7 +2,7 @@ class Pixel {
   int c;
   int x;
   int y;
-  int tsize = 5;
+  int tsize = 3;
   int colorStep = 30;
   
   Pixel(int c, int x, int y) {

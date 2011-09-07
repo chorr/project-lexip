@@ -1,11 +1,11 @@
 import processing.video.*;
-import fullscreen.*;
+//import fullscreen.*;
 
 Movie mov = null;
 Capture cam = null;
 PixelCanvas canvas;
 ScreenUtil scr = new ScreenUtil();
-FullScreen fs;
+//FullScreen fs;
 
 void setup() {
   size(scr.WIDTH, scr.HEIGHT, P2D);
