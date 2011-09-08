@@ -1,7 +1,5 @@
 class Pixel {
-  int c;
-  int x;
-  int y;
+  int c, x, y;
   int tsize = 3;
   
   Pixel(int c, int x, int y) {

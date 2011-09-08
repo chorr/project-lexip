@@ -1,5 +1,4 @@
 class ScreenUtil {
-  //int WIDTH = screen.width; int HEIGHT = screen.height;
   int WIDTH = 1024; int HEIGHT = 640;
   //int WIDTH = 640; int HEIGHT = 480;
   
