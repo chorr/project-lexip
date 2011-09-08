@@ -1,10 +1,11 @@
 import processing.video.*;
 import fullscreen.*;
-import FaceDetect.*;
+import hypermedia.video.*;
+import java.awt.Rectangle;
 
 Movie mov = null;
 Capture cam = null;
-FaceDetect fd;
+OpenCV opencv = null;
 PixelCanvas canvas;
 ScreenUtil scr = new ScreenUtil();
 FullScreen fs;
@@ -13,8 +14,11 @@ final boolean IS_FULLSCREEN = false;
 
 void setup() {
   size(scr.WIDTH, scr.HEIGHT, P2D);
-  background(255);
-  initCam();
+  background(0);
+  colorMode(HSB, 255);
+  
+  initOpenCV();
+  //initCam();
   //initMovie();
   
   if (IS_FULLSCREEN == true) {
@@ -22,6 +26,13 @@ void setup() {
     fs.setResolution(1024, 640);
     fs.enter();
   }
+}
+
+void initOpenCV() {
+  opencv = new OpenCV(this);
+  opencv.capture(320, 240);
+  opencv.cascade(OpenCV.CASCADE_FRONTALFACE_ALT);
+  canvas = new PixelCanvas(opencv.image());
 }
 
 void initCam() {
@@ -37,10 +48,6 @@ void initMovie() {
 }
 
 void draw() {
-  renderCanvas();
-}
-
-void renderCanvas() {
   background(255);
   if (cam != null) {
     if (cam.available()) {
@@ -51,8 +58,16 @@ void renderCanvas() {
   } else if (mov != null) {
     scale(scr.getFullScreenRatio(mov));
     canvas.update(mov);
+  } else if (opencv != null) {
+    opencv.read();
+    opencv.flip(OpenCV.FLIP_HORIZONTAL);
+    Rectangle[] faces = opencv.detect( 1.2, 2, OpenCV.HAAR_DO_CANNY_PRUNING, 40, 40);
+    opencv.brightness(20);
+    opencv.contrast(40);
+    
+    scale(scr.getFullScreenRatio(opencv.image()));
+    canvas.update(opencv.image(), faces);
   }
-  
 }
 
 void movieEvent(Movie m) {
@@ -60,5 +75,8 @@ void movieEvent(Movie m) {
 }
 
 void stop() {
+  if (opencv != null) {
+    opencv.stop();
+  }
   super.stop();
 }
