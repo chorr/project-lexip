@@ -27,7 +27,7 @@ class PixelCanvas {
     Pixel p;
     g.beginDraw();
 
-    for (int i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++) { // 픽셀을 더 촘촘하게 만들 수 있음
       p = px[i];
       p.c = target.pixels[i];
       if (p.x % p.tsize == 0 && p.y % p.tsize == 0) {

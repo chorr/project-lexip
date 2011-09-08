@@ -1,11 +1,15 @@
 import processing.video.*;
 import fullscreen.*;
+import FaceDetect.*;
 
 Movie mov = null;
 Capture cam = null;
+FaceDetect fd;
 PixelCanvas canvas;
 ScreenUtil scr = new ScreenUtil();
 FullScreen fs;
+
+final boolean IS_FULLSCREEN = false;
 
 void setup() {
   size(scr.WIDTH, scr.HEIGHT, P2D);
@@ -13,9 +17,11 @@ void setup() {
   initCam();
   //initMovie();
   
-  fs = new FullScreen(this);
-  fs.setResolution(1024, 640);
-  fs.enter();
+  if (IS_FULLSCREEN == true) {
+    fs = new FullScreen(this);
+    fs.setResolution(1024, 640);
+    fs.enter();
+  }
 }
 
 void initCam() {
@@ -40,15 +46,19 @@ void renderCanvas() {
     if (cam.available()) {
       cam.read();
       scale(scr.getFullScreenRatio(cam));
-      canvas.update(cam);      
+      canvas.update(cam);
     }
   } else if (mov != null) {
     scale(scr.getFullScreenRatio(mov));
     canvas.update(mov);
   }
+  
 }
 
 void movieEvent(Movie m) {
   m.read();
 }
 
+void stop() {
+  super.stop();
+}
