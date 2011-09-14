@@ -7,14 +7,13 @@ Movie mov = null;
 Capture cam = null;
 OpenCV opencv = null;
 PixelCanvas canvas;
-ScreenUtil scr = new ScreenUtil();
 FullScreen fs;
 
 final int CAPTURE_MODE = 0;
 final boolean IS_FULLSCREEN = false;
 
 void setup() {
-  size(scr.WIDTH, scr.HEIGHT, P2D);
+  size(ScreenUtil.WIDTH, ScreenUtil.HEIGHT, P2D);
   background(0);
   colorMode(HSB, 255);
   
@@ -22,9 +21,9 @@ void setup() {
   if (CAPTURE_MODE == 1) initCam();
   if (CAPTURE_MODE == 2) initMovie();
   
+  fs = new FullScreen(this);
+  fs.setResolution(ScreenUtil.FULL_WIDTH, ScreenUtil.FULL_HEIGHT);
   if (IS_FULLSCREEN == true) {
-    fs = new FullScreen(this);
-    fs.setResolution(1024, 640);
     fs.enter();
   }
 }
@@ -34,11 +33,11 @@ void draw() {
   if (cam != null) {
     if (cam.available()) {
       cam.read();
-      scale(scr.getFullScreenRatio(cam));
+      scale(ScreenUtil.getFullScreenRatio(cam));
       canvas.update(cam);
     }
   } else if (mov != null) {
-    scale(scr.getFullScreenRatio(mov));
+    scale(ScreenUtil.getFullScreenRatio(mov));
     canvas.update(mov);
   } else if (opencv != null) {
     opencv.read();
@@ -47,7 +46,7 @@ void draw() {
     opencv.brightness(20);
     opencv.contrast(40);
     
-    scale(scr.getFullScreenRatio(opencv.image()));
+    scale(ScreenUtil.getFullScreenRatio(opencv.image()));
     //canvas.update(opencv.image(), faces);
     canvas.update(opencv.image());
   }
@@ -98,5 +97,7 @@ void keyPressed() {
       canvas.px[i].isBreak = !canvas.px[i].isBreak;
       canvas.px[i].tsize = canvas.px[i].isBreak ? 3 : 1;
     }
+  } else if ((key == 'f' || key == 'F') && fs != null) {
+    fs.enter();
   }
 }
