@@ -26,16 +26,21 @@ class PixelCanvas {
   void update(PImage target) {
     Pixel p;
     color newColor;
+    float h, s, b;
+    
     g.beginDraw();
 
-    for (int i = 0; i < len; i++) { // 픽셀을 더 촘촘하게 만들 수 있음
+    for (int i = 0; i < len; i++) {
       p = px[i];
       p.c = target.pixels[i];
       if ( !(p.x % p.tsize == 0 && p.y % p.tsize == 0) ) continue;
       
-      newColor = color(breakColor(hue(p.c), 10), 
-                        min(200, breakColor(saturation(p.c), 20)), 
-                        max(0, breakColor(brightness(p.c), 40)));
+      h = hue(p.c);
+      s = breakColor(saturation(p.c), 20);
+      if (s < 80) s = 0;
+      b = brightness(p.c) > 170 ? 255 : (brightness(p.c) > 100 ? 170 : 0);
+      newColor = color(h, s, b);
+      
       g.fill(newColor);
       g.noStroke();
       g.rect(p.x, p.y, p.tsize, p.tsize);
