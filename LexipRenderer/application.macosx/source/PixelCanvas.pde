@@ -3,16 +3,12 @@ class PixelCanvas {
   int height;
   int len;
   Pixel[] px;
-  PGraphics g;
-  
-  final int COLOR_STEP = 40;
   
   PixelCanvas(PImage target) {
     width = target.width;
     height = target.height;
     len = width * height;
     px = new Pixel[len];
-    g = createGraphics(width, height, P2D);
     
     int idx = 0;
     for (int y = 0; y < height; y++) {
@@ -25,20 +21,10 @@ class PixelCanvas {
   
   void update(PImage target) {
     Pixel p;
-    g.beginDraw();
-
-    for (int i = 0; i < len; i++) { // 픽셀을 더 촘촘하게 만들 수 있음
+    for (int i = 0; i < len; i++) {
       p = px[i];
-      p.c = target.pixels[i];
-      if ( !(p.x % p.tsize == 0 && p.y % p.tsize == 0) ) continue;
-      
-      g.fill(color(breakColor(red(p.c)), breakColor(green(p.c)), breakColor(blue(p.c))));
-      g.noStroke();
-      g.rect(p.x, p.y, p.tsize, p.tsize);
+      p.update(target.pixels[i]);
     }
-    
-    g.endDraw();
-    image(g, 0, 0);
   }
   
   void update(PImage target, Rectangle[] faces) {
@@ -60,9 +46,5 @@ class PixelCanvas {
   PGraphics getGraphics() {
     return g;
   }
-  
-  float breakColor(float cl) {
-    return constrain(ceil(cl / COLOR_STEP) * COLOR_STEP, 0, 255);
-  }
-  
+    
 }
