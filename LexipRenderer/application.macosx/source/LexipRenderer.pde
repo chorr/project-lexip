@@ -8,28 +8,31 @@ Capture cam = null;
 OpenCV opencv = null;
 PixelCanvas canvas;
 FullScreen fs;
-
-final int CAPTURE_MODE = 0;
-final boolean IS_FULLSCREEN = true;
+int br = 20;
+int ct = 40;
 
 void setup() {
-  size(ScreenUtil.WIDTH, ScreenUtil.HEIGHT, P2D);
+  if (ScreenUtil.IS_FULLSCREEN) {
+    size(ScreenUtil.FULL_WIDTH, ScreenUtil.FULL_HEIGHT, P2D);
+  } else {
+    size(ScreenUtil.WIDTH, ScreenUtil.HEIGHT, P2D);
+  }
+  println(width);
   background(0);
   colorMode(HSB, 255);
   
-  if (CAPTURE_MODE == 0) initOpenCV();
-  if (CAPTURE_MODE == 1) initCam();
-  if (CAPTURE_MODE == 2) initMovie();
+  if (ScreenUtil.CAPTURE_MODE == 0) initOpenCV();
+  if (ScreenUtil.CAPTURE_MODE == 1) initCam();
+  if (ScreenUtil.CAPTURE_MODE == 2) initMovie();
   
   fs = new FullScreen(this);
   fs.setResolution(ScreenUtil.FULL_WIDTH, ScreenUtil.FULL_HEIGHT);
-  if (IS_FULLSCREEN == true) {
+  if (ScreenUtil.IS_FULLSCREEN) {
     fs.enter();
   }
 }
 
 void draw() {
-  //background(255);
   if (cam != null) {
     if (cam.available()) {
       cam.read();
@@ -40,15 +43,21 @@ void draw() {
     scale(ScreenUtil.getFullScreenRatio(mov));
     canvas.update(mov);
   } else if (opencv != null) {
+    Rectangle[] faces;
     opencv.read();
     opencv.flip(OpenCV.FLIP_HORIZONTAL);
-    Rectangle[] faces = opencv.detect( 1.2, 2, OpenCV.HAAR_DO_CANNY_PRUNING, 40, 40);
-    opencv.brightness(20);
-    opencv.contrast(40);
+    if (ScreenUtil.PIXEL_MODE == 0) {
+      faces = opencv.detect( 1.2, 2, OpenCV.HAAR_DO_CANNY_PRUNING, 40, 40);
+    }
+    opencv.brightness(br);
+    opencv.contrast(ct);
     
     scale(ScreenUtil.getFullScreenRatio(opencv.image()));
-    //canvas.update(opencv.image(), faces);
-    canvas.update(opencv.image());
+    if (ScreenUtil.PIXEL_MODE == 0) {
+      canvas.update(opencv.image(), faces);
+    } else {
+      canvas.update(opencv.image());
+    }
   }
 }
 
@@ -99,5 +108,17 @@ void keyPressed() {
     }
   } else if ((key == 'f' || key == 'F') && fs != null) {
     fs.enter();
+  } else if (key == '1') {
+    br = max(br - 1, -128);
+    println("brightness = " + br);
+  } else if (key == '2') {
+    br = min(br + 1, 128);
+    println("brightness = " + br);
+  } else if (key == '3') {
+    ct = max(ct - 1, -128);
+    println("contrast = " + ct);
+  } else if (key == '4') {
+    ct = min(ct + 1, 128);
+    println("contrast = " + ct);
   }
 }

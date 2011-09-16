@@ -3,12 +3,15 @@ class PixelCanvas {
   int height;
   int len;
   Pixel[] px;
+  PImage block1, block2;
   
   PixelCanvas(PImage target) {
     width = target.width;
     height = target.height;
     len = width * height;
     px = new Pixel[len];
+    block1 = loadImage("block1.png");
+    block2 = loadImage("block2.png");
     
     int idx = 0;
     for (int y = 0; y < height; y++) {
@@ -29,16 +32,17 @@ class PixelCanvas {
   
   void update(PImage target, Rectangle[] faces) {
     PGraphics lg = createGraphics(target.width, target.height, P2D);
+    Rectangle f;
+    float ratio;
+    
     lg.image(target, 0, 0);
     lg.beginDraw();
-
-    lg.strokeWeight(4);
-    lg.fill(255);
-    lg.ellipseMode(CENTER);
+    lg.imageMode(CENTER);
     for (int i = 0, l = faces.length; i < l; i++) {
-      lg.ellipse( faces[i].x - 30, faces[i].y - 20, faces[i].width * 1.7, faces[i].width * 1.0 );
+      f = faces[i];
+      ratio = (float)f.width / 100.0;
+      lg.image( block1, f.x + f.width / 2, f.y - (f.height), f.width, block1.height * ratio );
     }
-    
     lg.endDraw();
     this.update(lg);
   }

@@ -18,16 +18,25 @@ class Pixel {
     
     if (isBreak) {
       h = hue(c);
-      s = breakColor(saturation(c), 20);
-      if (s < 80) s = 0;
-      b = brightness(c) > 170 ? 255 : (brightness(c) > 80 ? 100 : 0);
+      if (ScreenUtil.PIXEL_MODE == 0 || ScreenUtil.PIXEL_MODE == 2) {
+        s = breakColor(saturation(c), 20);
+        if (s < 80) s = 0;
+        b = brightness(c) > 170 ? 255 : (brightness(c) > 80 ? 100 : 0);
+      } else if (ScreenUtil.PIXEL_MODE == 1) {
+        s = 0;
+        b = brightness(c) > 130 ? 255 : 0;
+      }
       newColor = color(h, s, b);
+      
       fill(newColor, 210);
     } else {
       fill(c);
     }
     
     noStroke();
+    if (ScreenUtil.PIXEL_MODE == 2) {
+      stroke(0);
+    }
     rect(x, y, tsize, tsize);
   }
   
