@@ -22,10 +22,24 @@ class Pixel {
         s = breakColor(saturation(c), 20);
         if (s < 80) s = 0;
         b = brightness(c) > 170 ? 255 : (brightness(c) > 80 ? 100 : 0);
-      } else if (ScreenUtil.PIXEL_MODE == 1) {
+      } else if (ScreenUtil.PIXEL_MODE == 1) { // B & W
         s = 0;
         b = brightness(c) > 130 ? 255 : 0;
+      } else if (ScreenUtil.PIXEL_MODE == 3) { // RED
+        h = 0;
+        s = brightness(c) > 130 ? 0 : 200;
+        b = brightness(c) > 130 ? 255 : 220;
+      } else if (ScreenUtil.PIXEL_MODE == 4) { // GREEN
+        h = 90;
+        s = brightness(c) > 130 ? 0 : 190;
+        b = brightness(c) > 130 ? 255 : 195;
+      } else if (ScreenUtil.PIXEL_MODE == 5) { // BLUE
+        h = 176;
+        s = brightness(c) > 130 ? 0 : 195;
+        b = brightness(c) > 130 ? 255 : 207;
       }
+      
+      
       newColor = color(h, s, b);
       
       fill(newColor, 210);
