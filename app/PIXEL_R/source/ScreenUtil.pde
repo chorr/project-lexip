@@ -1,5 +1,5 @@
 static class ScreenUtil {
-  final static int PIXEL_MODE = 0;
+  final static int PIXEL_MODE = 3;
   final static int CAPTURE_MODE = 0;
   final static boolean IS_FULLSCREEN = true;
 

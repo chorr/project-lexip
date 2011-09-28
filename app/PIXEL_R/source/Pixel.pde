@@ -37,9 +37,6 @@ class Pixel {
         h = 176;
         s = brightness(c) > 130 ? 0 : 195;
         b = brightness(c) > 130 ? 255 : 207;
-      } else if (ScreenUtil.PIXEL_MODE == 6) { // Trinity
-        s = 0;
-        b = brightness(c) > 130 ? 255 : 190;
       }
       
       
