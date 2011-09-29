@@ -3,7 +3,6 @@ import fullscreen.*;
 import imageadjuster.*;
 
 Capture cam;
-//PImage res = new PImage(140, 105, RGB);
 PImage res = new PImage(140, 105, RGB);
 ArrayList ls = new ArrayList();
 FullScreen fs;
@@ -11,16 +10,15 @@ ImageAdjuster adjust;
 int br = 50;
 int ct = 40;
 int MODE = 3;
-final static boolean IS_FS = false;
+final static boolean IS_FS = true;
 
 void setup() {
-//  size(1024, 640);
-  size(1366, 768);
+  size(1024, 640);
   background(0);
   cam = new Capture(this, 320, 240);
   
   adjust = new ImageAdjuster(this);
-  adjust.brightness(0.25f);
+  adjust.brightness(0.2f);
   adjust.contrast(1.3f);
 
   fs = new FullScreen(this);
@@ -45,7 +43,7 @@ void draw() {
   adjust.apply(tmp);
   ls.add(tmp);
   
-  if (ls.size() > 48) {
+  if (ls.size() > 24) {
     ls.remove(0);
   } else {
     return;
@@ -85,18 +83,16 @@ void draw() {
     colorMode(RGB, 255);
     for (int x=0; x<tmp.width; x++) {
       for (int y=0; y<tmp.height; y++) {
-        color cR = color(red(((PImage)ls.get(47)).ge  t(x, y)), 0, 0);
-        color cG = color(0, green(((PImage)ls.get(28)).get(x, y)), 0);
+        color cR = color(red(((PImage)ls.get(23)).get(x, y)), 0, 0);
+        color cG = color(0, green(((PImage)ls.get(13)).get(x, y)), 0);
         color cB = color(0, 0, blue(((PImage)ls.get(0)).get(x, y)));
         color cNew = blendColor(blendColor(cR, cG, ADD), cB, ADD);
         res.set(x, y, cNew);
       }
     }
-//    image(res, 0, -64, 1024, 768);
-    image(res, 0, -128, 1366, 1024);
+    image(res, 0, -64, 1024, 768);
   } else {
-//    image(res, 0, -64, 1024, 768);
-    image(res, 0, -128, 1366, 1024);
+    image(tmp, 0, -64, 1024, 768);
   }
   
 } 

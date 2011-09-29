@@ -1,9 +1,31 @@
-import processing.video.*;
-import fullscreen.*;
-import imageadjuster.*;
+import processing.core.*; 
+import processing.xml.*; 
+
+import processing.video.*; 
+import fullscreen.*; 
+import imageadjuster.*; 
+
+import java.applet.*; 
+import java.awt.Dimension; 
+import java.awt.Frame; 
+import java.awt.event.MouseEvent; 
+import java.awt.event.KeyEvent; 
+import java.awt.event.FocusEvent; 
+import java.awt.Image; 
+import java.io.*; 
+import java.net.*; 
+import java.text.*; 
+import java.util.*; 
+import java.util.zip.*; 
+import java.util.regex.*; 
+
+public class ColorMovePrototype extends PApplet {
+
+
+
+
 
 Capture cam;
-//PImage res = new PImage(140, 105, RGB);
 PImage res = new PImage(140, 105, RGB);
 ArrayList ls = new ArrayList();
 FullScreen fs;
@@ -11,16 +33,15 @@ ImageAdjuster adjust;
 int br = 50;
 int ct = 40;
 int MODE = 3;
-final static boolean IS_FS = false;
+final static boolean IS_FS = true;
 
-void setup() {
-//  size(1024, 640);
-  size(1366, 768);
+public void setup() {
+  size(1024, 640);
   background(0);
   cam = new Capture(this, 320, 240);
   
   adjust = new ImageAdjuster(this);
-  adjust.brightness(0.25f);
+  adjust.brightness(0.2f);
   adjust.contrast(1.3f);
 
   fs = new FullScreen(this);
@@ -30,7 +51,7 @@ void setup() {
   }
 }
 
-void draw() {
+public void draw() {
   println("FPS " + frameRate);
   if (!cam.available()) return;
   cam.read();
@@ -45,7 +66,7 @@ void draw() {
   adjust.apply(tmp);
   ls.add(tmp);
   
-  if (ls.size() > 48) {
+  if (ls.size() > 24) {
     ls.remove(0);
   } else {
     return;
@@ -53,7 +74,7 @@ void draw() {
   
   colorMode(HSB, 255);
   for (int i=0; i<tmp.pixels.length; i++) {
-    color c = tmp.pixels[i];
+    int c = tmp.pixels[i];
     float cH = hue(c);
     float cS = saturation(c);
     float cB = brightness(c);
@@ -85,23 +106,21 @@ void draw() {
     colorMode(RGB, 255);
     for (int x=0; x<tmp.width; x++) {
       for (int y=0; y<tmp.height; y++) {
-        color cR = color(red(((PImage)ls.get(47)).ge  t(x, y)), 0, 0);
-        color cG = color(0, green(((PImage)ls.get(28)).get(x, y)), 0);
-        color cB = color(0, 0, blue(((PImage)ls.get(0)).get(x, y)));
-        color cNew = blendColor(blendColor(cR, cG, ADD), cB, ADD);
+        int cR = color(red(((PImage)ls.get(23)).get(x, y)), 0, 0);
+        int cG = color(0, green(((PImage)ls.get(13)).get(x, y)), 0);
+        int cB = color(0, 0, blue(((PImage)ls.get(0)).get(x, y)));
+        int cNew = blendColor(blendColor(cR, cG, ADD), cB, ADD);
         res.set(x, y, cNew);
       }
     }
-//    image(res, 0, -64, 1024, 768);
-    image(res, 0, -128, 1366, 1024);
+    image(res, 0, -64, 1024, 768);
   } else {
-//    image(res, 0, -64, 1024, 768);
-    image(res, 0, -128, 1366, 1024);
+    image(tmp, 0, -64, 1024, 768);
   }
   
 } 
 
-void keyPressed() {
+public void keyPressed() {
   if ((key == 'f' || key == 'F') && fs != null) {
     fs.enter();
   } else if (key == '1') {
@@ -131,12 +150,16 @@ void keyPressed() {
   }
 }
 
-void stop() {
+public void stop() {
   cam.stop();
   super.stop();
 }
 
-float breakColor(float cl, float step) {
+public float breakColor(float cl, float step) {
   return constrain(ceil(cl / step) * step, 0, 255);
 }
 
+  static public void main(String args[]) {
+    PApplet.main(new String[] { "--present", "--bgcolor=#666666", "--hide-stop", "ColorMovePrototype" });
+  }
+}
