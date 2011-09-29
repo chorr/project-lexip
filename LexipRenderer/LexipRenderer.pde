@@ -33,6 +33,7 @@ void setup() {
 }
 
 void draw() {
+  println(frameRate);
   if (cam != null) {
     if (cam.available()) {
       cam.read();

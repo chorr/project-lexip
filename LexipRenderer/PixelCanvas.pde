@@ -25,15 +25,20 @@ class PixelCanvas {
   void update(PImage target) {
     Pixel p;
     PImage tmp = new PImage(ScreenUtil.WIDTH, ScreenUtil.HEIGHT);
-    
-    for (int i = 0; i < len; i++) {
-      p = px[i];
-      p.update(target.pixels[i]);
+    int i = 0;
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        p = px[i];
+        if (x % p.tsize == 0 && y % p.tsize == 0) {
+          p.update(target.pixels[i]);
+        }
+        i++;
+      }
     }
     
     if (ScreenUtil.PIXEL_MODE == 6) {  // trinity
       loadPixels();
-      for (int i=0; i < pixels.length; i++) tmp.pixels[i] = pixels[i];
+      for (i=0; i < pixels.length; i++) tmp.pixels[i] = pixels[i];
       ls.add(tmp);
       if (ls.size() > 13) {
         ls.remove(0);
@@ -42,7 +47,7 @@ class PixelCanvas {
       }
       
       colorMode(RGB);
-      for (int i=0; i < pixels.length; i++) {
+      for (i=0; i < pixels.length; i++) {
         color hR = color(red(((PImage)ls.get(12)).pixels[i]), 0, 0);
         color hG = color(0, green(((PImage)ls.get(6)).pixels[i]), 0);
         color hB = color(0, 0, blue(((PImage)ls.get(0)).pixels[i]));

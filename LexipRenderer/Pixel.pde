@@ -46,7 +46,7 @@ class Pixel {
       newColor = color(h, s, b);
       
       if (ScreenUtil.PIXEL_MODE == 6) {
-        fill(newColor);
+        fill(newColor, 180);
       } else {
         fill(newColor, 210);
       }
