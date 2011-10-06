@@ -5,18 +5,20 @@ import imageadjuster.*;
 Capture cam;
 PImage res = new PImage(140, 105, RGB);
 ArrayList ls = new ArrayList();
+SoftFullScreen sfs;
 FullScreen fs;
 ImageAdjuster adjust;
 NetUtil net = new NetUtil();
 int br = 50;
 int ct = 40;
 int MODE = 3;
+
 final static boolean IS_FS = false;
 final static int BF_SIZE = 64;
 
 void setup() {
-  size(1024, 640);
-//  size(1280, 720);
+//  size(1024, 640);
+  size(1280, 720);  // for iMac
   background(0);
   cam = new Capture(this, 320, 240);
   
@@ -24,10 +26,15 @@ void setup() {
   adjust.brightness(0.25f);
   adjust.contrast(1.4f);
 
-  fs = new FullScreen(this);
-  if (IS_FS) {
-    fs.setResolution(1024, 640);
-    fs.enter();
+  if (MODE == 0) {
+    sfs = new SoftFullScreen(this);
+    if (IS_FS) sfs.enter();
+  } else {
+    fs = new FullScreen(this);
+    if (IS_FS) {
+      fs.setResolution(1024, 640);
+      fs.enter();
+    }
   }
 }
 
@@ -95,11 +102,13 @@ void draw() {
         res.set(x, y, cNew);
       }
     }
-    image(res, 0, -64, 1024, 768);
-//    image(res, 0, -120, 1280, 960);
+    if (IS_FS) {
+      image(res, 0, -120, 1280, 960);
+    } else {
+      image(res, 0, -64, 1024, 768);
+    }
   } else {
     image(tmp, 0, -64, 1024, 768);
-//    image(tmp, 0, -120, 1280, 960);
   }
   
 } 
@@ -123,13 +132,15 @@ void keyPressed() {
     MODE = 2;
   } else if (key == 'b' || key == 'B') {
     MODE = 3;
-  } else if (keyCode == 32) {
+  } else if (keyCode == 32 && MODE != 0) {
     net.saveImage("pixel", "pic", MODE);
   }
 }
 
 void mousePressed() {
-  net.saveImage("pixel", "pic", MODE);
+  if (MODE != 0) {
+    net.saveImage("pixel", "pic", MODE);
+  }
 }
 
 void stop() {
