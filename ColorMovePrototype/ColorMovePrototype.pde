@@ -124,12 +124,12 @@ void keyPressed() {
   } else if (key == 'b' || key == 'B') {
     MODE = 3;
   } else if (keyCode == 32) {
-    net.saveImage("pixel", "pic");
+    net.saveImage("pixel", "pic", MODE);
   }
 }
 
 void mousePressed() {
-  net.saveImage("pixel", "pic");
+  net.saveImage("pixel", "pic", MODE);
 }
 
 void stop() {

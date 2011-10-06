@@ -4,16 +4,20 @@ class NetUtil
   
   public NetUtil() {}
   
-  void saveImage(String title, String folder) {
+  void saveImage(String title, String folder, int mode) {
     println("-- SAVING PNG START");
     save("tmp.png");
-    postData(title+"-"+year()+nf(month(),2)+nf(day(),2)+"-"+nf(hour(),2)+nf(minute(),2)+nf(second(),2)+"-"+frameCount,"png",folder,loadBytes("tmp.png"));
+    postData(title+"-"+year()+nf(month(),2)+nf(day(),2)+"-"+nf(hour(),2)+nf(minute(),2)+nf(second(),2)+"-"+frameCount%100,
+      "png",
+      folder,
+      loadBytes("tmp.png"), 
+      mode);
     println("-- SAVING PNG STOP");
   }
   
-  void postData(String title, String ext, String folder, byte[] bytes) {
+  void postData(String title, String ext, String folder, byte[] bytes, int mode) {
     try{
-      URL u = new URL(url+"saveFile.php?title="+title+"&ext="+ext+"&folder="+folder);
+      URL u = new URL(url+"saveFile.php?title="+title+"&ext="+ext+"&folder="+folder+"&mode="+mode);
       URLConnection c = u.openConnection();
       // post multipart data
    
