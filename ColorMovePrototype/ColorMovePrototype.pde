@@ -9,16 +9,17 @@ SoftFullScreen sfs;
 FullScreen fs;
 ImageAdjuster adjust;
 NetUtil net = new NetUtil();
+PFont font;
 int br = 50;
 int ct = 40;
-int MODE = 3;
+int MODE = 2;
 
 final static boolean IS_FS = false;
 final static int BF_SIZE = 64;
 
 void setup() {
-//  size(1024, 640);
-  size(1280, 720);  // for iMac
+  size(1024, 640);
+//  size(1280, 720);  // for iMac
   background(0);
   cam = new Capture(this, 320, 240);
   
@@ -36,6 +37,10 @@ void setup() {
       fs.enter();
     }
   }
+  
+  font = loadFont("AndaleMono-48.vlw");
+  textFont(font, 24);
+  textAlign(LEFT);
 }
 
 void draw() {
@@ -110,7 +115,6 @@ void draw() {
   } else {
     image(tmp, 0, -64, 1024, 768);
   }
-  
 } 
 
 void keyPressed() {
