@@ -12,7 +12,7 @@ PFont font;
 boolean is_disp = false;
 int textTimer = -1;
 
-int MODE = 0;
+int MODE = 2;
 final static boolean IS_FS = false;
 final static int BF_SIZE = 64;
 
@@ -20,6 +20,7 @@ void setup() {
   size(1024, 640);
 //  size(1280, 720);  // for iMac
   background(0);
+  noCursor();
   cam = new Capture(this, 320, 240);
   
   adjust = new ImageAdjuster(this);
@@ -98,11 +99,8 @@ void draw() {
         res.set(x, y, cNew);
       }
     }
-    if (IS_FS) {
-      image(res, 0, -120, 1280, 960);
-    } else {
-      image(res, 0, -64, 1024, 768);
-    }
+    image(res, 0, -64, 1024, 768);
+//    image(res, 0, -120, 1280, 960);  // for iMac.
   } else {
     image(res, 0, -64, 1024, 768);
   }
