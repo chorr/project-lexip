@@ -1,6 +1,7 @@
 class NetUtil 
 {
   final static String url = "http://pixel.chorr.net/";
+  public String message = "";
   
   public NetUtil() {}
   
@@ -51,6 +52,7 @@ class NetUtil
         while(sIn!=null){
           if(sIn!=null){
             System.out.println(sIn);
+            this.message = sIn;
           }
           sIn = in.readLine();
         }
