@@ -3,47 +3,55 @@ import fullscreen.*;
 import imageadjuster.*;
 
 Capture cam;
-PImage res = new PImage(140, 105, RGB);
+PImage res = new PImage(140, 105, ARGB);
 ArrayList ls = new ArrayList();
-FullScreen fs;
+SoftFullScreen sfs;
 ImageAdjuster adjust;
-int br = 50;
-int ct = 40;
-int MODE = 3;
-final static boolean IS_FS = true;
+NetUtil net = new NetUtil();
+PFont font;
+boolean is_disp = false;
+int textTimer = -1;
+
+int MODE = 2;
+final static boolean IS_FS = false;
+final static int BF_SIZE = 64;
 
 void setup() {
   size(1024, 640);
+//  size(1280, 720);  // for iMac
   background(0);
+  noCursor();
   cam = new Capture(this, 320, 240);
   
   adjust = new ImageAdjuster(this);
   adjust.brightness(0.2f);
-  adjust.contrast(1.3f);
+  adjust.contrast(1.4f);
 
-  fs = new FullScreen(this);
-  fs.setResolution(1024, 640);
-  if (IS_FS) {
-    fs.enter();
-  }
+  sfs = new SoftFullScreen(this);
+  if (IS_FS) sfs.enter();
+  
+  font = loadFont("Helvetica-64.vlw");
+  textFont(font, 64);
+  textAlign(CENTER);
 }
 
 void draw() {
-  println("FPS " + frameRate);
   if (!cam.available()) return;
   cam.read();
 
+  // arrange image.
   PImage tmp = new PImage(cam.width, cam.height, ARGB);
   for (int x=0; x<cam.width; x++) {
     for (int y=0; y<cam.height; y++) {
       tmp.set(cam.width - x - 1, y, cam.get(x, y));
     }
   }
-  tmp.resize(res.width, res.height);
   adjust.apply(tmp);
-  ls.add(tmp);
+  tmp.resize(res.width, res.height);
   
-  if (ls.size() > 24) {
+  // image queue.
+  ls.add(tmp);
+  if (ls.size() > BF_SIZE) {
     ls.remove(0);
   } else {
     return;
@@ -76,46 +84,49 @@ void draw() {
       cB = brightness(c) > 130 ? 255 : 207;
       cA = 190;
     }
-    tmp.pixels[i] = color(cH, cS, cB, cA);
+    res.pixels[i] = color(cH, cS, cB, cA);
   }
+  res.updatePixels();
   
   if (MODE == 0) {
     colorMode(RGB, 255);
-    for (int x=0; x<tmp.width; x++) {
-      for (int y=0; y<tmp.height; y++) {
-        color cR = color(red(((PImage)ls.get(23)).get(x, y)), 0, 0);
-        color cG = color(0, green(((PImage)ls.get(13)).get(x, y)), 0);
+    for (int x=0; x < res.width; x++) {
+      for (int y=0; y < res.height; y++) {
+        color cR = color(red(((PImage)ls.get(BF_SIZE-1)).get(x, y)), 0, 0);
+        color cG = color(0, green(((PImage)ls.get(BF_SIZE/2)).get(x, y)), 0);
         color cB = color(0, 0, blue(((PImage)ls.get(0)).get(x, y)));
         color cNew = blendColor(blendColor(cR, cG, ADD), cB, ADD);
         res.set(x, y, cNew);
       }
     }
     image(res, 0, -64, 1024, 768);
+//    image(res, 0, -120, 1280, 960);  // for iMac.
   } else {
-    image(tmp, 0, -64, 1024, 768);
+    image(res, 0, -64, 1024, 768);
   }
   
+  if (is_disp) {
+    image(tmp, 0, 0);
+  }
+  
+  if (net.message != "") {
+    showMessage();
+  }
 } 
 
 void keyPressed() {
-  if ((key == 'f' || key == 'F') && fs != null) {
-    fs.enter();
+  if ((key == 'f' || key == 'F') && sfs != null) {
+    sfs.enter();
+  } else if (key == 'd' || key == 'D') {
+    is_disp = !is_disp;
   } else if (key == '1') {
-    adjust.brightness(-0.05f);
-    br = max(br - 1, -128);
-    println("brightness = " + br);
+    adjust.brightness(-0.01f);
   } else if (key == '2') {
-    adjust.brightness(0.05f);
-    br = min(br + 1, 128);
-    println("brightness = " + br);
+    adjust.brightness(0.01f);
   } else if (key == '3') {
-    adjust.contrast(0.9f);
-    ct = max(ct - 1, -128);
-    println("contrast = " + ct);
+    adjust.contrast(0.95f);
   } else if (key == '4') {
-    adjust.contrast(1.1f);
-    ct = min(ct + 1, 128);
-    println("contrast = " + ct);
+    adjust.contrast(1.05f);
   } else if (key == 'a' || key == 'A') {
     MODE = 0;
   } else if (key == 'r' || key == 'R') {
@@ -124,6 +135,14 @@ void keyPressed() {
     MODE = 2;
   } else if (key == 'b' || key == 'B') {
     MODE = 3;
+  } else if (keyCode == 32 && MODE != 0 && net.message == "") {
+    net.saveImage("pixel", "pic", MODE);
+  }
+}
+
+void mousePressed() {
+  if (MODE != 0 && net.message == "") {
+    net.saveImage("pixel", "pic", MODE);
   }
 }
 
@@ -136,3 +155,18 @@ float breakColor(float cl, float step) {
   return constrain(ceil(cl / step) * step, 0, 255);
 }
 
+void showMessage() {
+  noStroke();
+  fill(0, 180);
+  rect(0, height / 2 - 110, width, 180);
+  fill(255);
+  text(net.message, width / 2, height / 2);
+  if (textTimer == -1) {
+    textTimer = 130;
+  } else if (textTimer == 0) {
+    net.message = "";
+    textTimer = -1;
+  } else {
+    textTimer--;
+  }
+}

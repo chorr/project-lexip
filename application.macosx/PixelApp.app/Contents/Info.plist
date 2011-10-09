@@ -3,7 +3,7 @@
 <plist version="0.9">
   <dict>
     <key>CFBundleName</key>
-    <string>ColorMovePrototype</string>
+    <string>PixelApp</string>
     <key>CFBundleVersion</key>
     <string>1.0</string>
     <key>CFBundleAllowMixedLocalizations</key>
@@ -21,11 +21,11 @@
     <key>CFBundleIconFile</key>
     <string>sketch.icns</string>
     <key>CFBundleIdentifier</key> 
-    <string>ColorMovePrototype</string>
+    <string>PixelApp</string>
 
     <!-- http://developer.apple.com/documentation/MacOSX/Conceptual/BPRuntimeConfig/Articles/PListKeys.html#//apple_ref/doc/uid/20001431-113616 -->
     <key>LSUIPresentationMode</key>
-    <integer>4</integer>
+    <integer>0</integer>
 
     <!-- make sure that applications open in 32-bit mode on Snow Leopard,
 	 otherwise video and most other native libraries will choke 
@@ -41,7 +41,7 @@
       <key>VMOptions</key>
       <string></string>
       <key>MainClass</key>
-      <string>ColorMovePrototype</string>
+      <string>PixelApp</string>
       <key>JVMVersion</key>
       <string>1.5*</string>
       <key>JVMArchs</key>
@@ -50,7 +50,7 @@
 	<string>ppc</string>
       </array>
       <key>ClassPath</key>
-      <string>$JAVAROOT/ColorMovePrototype.jar:$JAVAROOT/core.jar:$JAVAROOT/video.jar:$JAVAROOT/fullscreen.jar:$JAVAROOT/imageadjuster.jar</string>
+      <string>$JAVAROOT/PixelApp.jar:$JAVAROOT/core.jar:$JAVAROOT/video.jar:$JAVAROOT/fullscreen.jar:$JAVAROOT/imageadjuster.jar</string>
 
       <!-- http://developer.apple.com/releasenotes/Java/java141/system_properties/chapter_4_section_1.html#//apple_ref/doc/uid/TP30000285 -->
       <key>Properties</key>
