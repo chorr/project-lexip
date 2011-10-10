@@ -15,7 +15,7 @@ PFont font;
 boolean is_disp = false;
 int textTimer = -1;
 
-int MODE = 0;
+int MODE = 2;
 final static boolean IS_FS = false;
 final static int BF_SIZE = 64;
 
@@ -41,8 +41,6 @@ void setup() {
   loops[0] = minim.loadFile("loop1.mp3");
   loops[1] = minim.loadFile("loop2.mp3");
   loops[1].mute();
-  loops[0].loop();
-  loops[1].loop();
 }
 
 void draw() {
