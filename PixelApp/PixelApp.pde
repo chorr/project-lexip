@@ -1,7 +1,6 @@
 import processing.video.*;
 import fullscreen.*;
 import imageadjuster.*;
-import ddf.minim.*;
 
 Capture cam;
 PImage res = new PImage(140, 105, ARGB);
@@ -9,8 +8,6 @@ ArrayList ls = new ArrayList();
 SoftFullScreen sfs;
 ImageAdjuster adjust;
 NetUtil net = new NetUtil();
-AudioPlayer[] loops = new AudioPlayer[4];
-Minim minim;
 PFont font;
 boolean is_disp = false;
 int textTimer = -1;
@@ -36,11 +33,6 @@ void setup() {
   font = loadFont("Helvetica-64.vlw");
   textFont(font, 64);
   textAlign(CENTER);
-  
-  minim = new Minim(this);
-  loops[0] = minim.loadFile("loop1.mp3");
-  loops[1] = minim.loadFile("loop2.mp3");
-  loops[1].mute();
 }
 
 void draw() {
@@ -127,9 +119,6 @@ void draw() {
     image(res, 0, -64, 1024, 768);
 //    image(res, 0, -120, 1280, 960);  // for iMac.
 
-    if (gap2 > 600000) soundOn(loops[1]);
-    else soundOff(loops[1]);
-    
   } else {
     
     image(res, 0, -64, 1024, 768);
@@ -179,9 +168,6 @@ void mousePressed() {
 
 void stop() {
   cam.stop();
-  loops[0].close();
-  loops[1].close();
-  minim.stop();
   super.stop();
 }
 

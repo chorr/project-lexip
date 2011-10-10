@@ -1,6 +1,6 @@
 class NetUtil 
 {
-  final static String url = "http://pixel.chorr.net/";
+  final static String url = "http://pixelddc.com/";
   public String message = "";
   
   public NetUtil() {}
