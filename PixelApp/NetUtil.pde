@@ -25,6 +25,7 @@ class NetUtil
       c.setDoOutput(true);
       c.setDoInput(true);
       c.setUseCaches(false);
+      c.setConnectTimeout(4000);
    
       // set request headers
       c.setRequestProperty("Content-Type", "multipart/form-data; boundary=AXi93A");
