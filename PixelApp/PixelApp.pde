@@ -12,8 +12,8 @@ PFont font;
 boolean is_disp = false;
 int textTimer = -1;
 
-int MODE = 2;
-final static boolean IS_FS = false;
+int MODE = 3;
+final static boolean IS_BIN = true;
 final static int BF_SIZE = 64;
 
 void setup() {
@@ -28,7 +28,8 @@ void setup() {
   adjust.contrast(1.4f);
 
   sfs = new SoftFullScreen(this);
-  if (IS_FS) sfs.enter();
+  sfs.setShortcutsEnabled(false);
+  if (IS_BIN) sfs.enter();
   
   font = loadFont("Helvetica-64.vlw");
   textFont(font, 64);
@@ -135,11 +136,8 @@ void draw() {
 } 
 
 void keyPressed() {
-  if ((key == 'f' || key == 'F') && sfs != null) {
-    sfs.enter();
-  } else if (key == 'd' || key == 'D') {
-    is_disp = !is_disp;
-  } else if (key == '1') {
+  if (key == KeyEvent.VK_ESCAPE) key = 0;
+  if (key == '1') {
     adjust.brightness(-0.01f);
   } else if (key == '2') {
     adjust.brightness(0.01f);
@@ -147,6 +145,12 @@ void keyPressed() {
     adjust.contrast(0.95f);
   } else if (key == '4') {
     adjust.contrast(1.05f);
+  } 
+  if (IS_BIN) return;
+  if ((key == 'f' || key == 'F') && sfs != null) {
+    sfs.enter();
+  } else if (key == 'd' || key == 'D') {
+    is_disp = !is_disp;
   } else if (key == 'a' || key == 'A') {
     MODE = 0;
   } else if (key == 'r' || key == 'R') {
