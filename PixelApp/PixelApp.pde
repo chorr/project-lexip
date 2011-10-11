@@ -191,9 +191,3 @@ void showMessage() {
   }
 }
 
-void soundOn(AudioPlayer ap) {
-  if (ap.isMuted()) ap.unmute();
-}
-void soundOff(AudioPlayer ap) {
-  if (!ap.isMuted()) ap.mute();
-}
